@@ -1,0 +1,8 @@
+Component base
+{
+    Communications
+    {
+    };
+    language Cpp11;
+};
+
