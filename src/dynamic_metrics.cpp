@@ -29,18 +29,20 @@ Dynamic_metrics::~Dynamic_metrics()
 	qDebug() << __FUNCTION__;
 }
 
-void Dynamic_metrics::addMetric(string metricName, std::function metricFunction)
+void Dynamic_metrics::addMetric(const std::string &metricName, std::function<PAR(PAR)> metricFunction)
 {
 	qDebug() << __FUNCTION__;
-	metrics.insert(std::pair<string, std::function>(metricName, metricFunction));
+	//metrics.insert(std::make_pair(metricName, metricFunction));
 }
 
-T Dynamic_metrics::getMetrics(string name, std::vector<T> paramsList)
+PAR Dynamic_metrics::getMetric(const std::string &name, const std::vector<PAR> &params_list)
 {
 	qDebug() << __FUNCTION__;
-	std::function f = metrics.find(name);
-	T result = f(paramsList); //Esto habrá q modificarlo, obviamente no se puede llamar así
-	return result;
+	auto f = metrics.find(name);
+	auto res = f->second(params_list[0]);
+
+    PAR kk = 4;
+	return res;
 }
 
 

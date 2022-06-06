@@ -29,6 +29,9 @@
 
 #include <genericworker.h>
 #include <innermodel/innermodel.h>
+#include "dynamic_metrics.h"
+#include "tuple_print.h"
+
 
 class SpecificWorker : public GenericWorker
 {

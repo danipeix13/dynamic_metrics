@@ -24,7 +24,7 @@ SET ( SOURCES
   genericmonitor.cpp
   commonbehaviorI.cpp
   genericworker.cpp
-)
+        tuple_print.h)
 
 
 

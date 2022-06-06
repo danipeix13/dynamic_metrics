@@ -25,7 +25,17 @@
 #ifndef DYNAMIC_METRICS_H
 #define DYNAMIC_METRICS_H
 
-typedef std::variant<int, float, string, Eigen2f, Eigen3f> T;
+#include <variant>
+#include <QtCore>
+#include <functional>
+
+// The struct Overload can have arbitrary many base classes (Ts ...).
+// It derives from each class public and brings the call operator (Ts::operator...) of each base class into its scope.
+//The base classes need an overloaded call operator (Ts::operator()).
+//Lambdas provide this call operator.
+
+
+using PAR = std::variant<int, float, std::string>;
 
 /*
 *	CÓMO Y CUÁNDO USAR
@@ -43,16 +53,19 @@ typedef std::variant<int, float, string, Eigen2f, Eigen3f> T;
 *       T resultado = getMetric(name, std::vector<T>);
 */
 
-class Dynamic_metrics()
+class Dynamic_metrics
 {
 	private:
-		std::map<string, std::function> metrics;
+		std::map<std::string, std::function<PAR(PAR)>> metrics;
 
 	public:
 		Dynamic_metrics();
 		~Dynamic_metrics();
-		void addMetric(string metricName, std::function metricFunction);
-		T getMetric(string name, std::vector<T> paramsList)
-}
+		void addMetric(const std::string &metricName, std::function<PAR(PAR)> metricFunction);
+		PAR getMetric(const std::string &name, const std::vector<PAR> &paramsList);
+
+
+
+};
 
 #endif
