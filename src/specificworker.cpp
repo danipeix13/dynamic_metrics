@@ -31,7 +31,7 @@ SpecificWorker::SpecificWorker(TuplePrx tprx, bool startup_check) : GenericWorke
 */
 SpecificWorker::~SpecificWorker()
 {
-	std::cout << "Destroying SpecificWorker" << std::endl;
+	qDebug() << __FUNCTION__;
 }
 
 bool SpecificWorker::setParams(RoboCompCommonBehavior::ParameterList params)
@@ -39,9 +39,26 @@ bool SpecificWorker::setParams(RoboCompCommonBehavior::ParameterList params)
 	return true;
 }
 
+int pruebaSuma(TYPE data)
+{
+    qDebug() << "\t\tENTRAMOS :)";
+	int ret = 0;
+	std::vector<std::vector<int>> vec = std::any_cast<std::vector<std::vector<int>>>(data);
+	for(std::vector<int> v: vec)
+	{
+        for(int i: v)
+        {
+            ret += i;
+            qDebug() << "\t\t" << i;
+        }
+	}
+    qDebug() << "\t\tRET: " << ret;
+	return ret;
+}
+
 void SpecificWorker::initialize(int period)
 {
-	std::cout << "Initialize worker" << std::endl;
+	qDebug() << __FUNCTION__;
 	this->Period = period;
 	if(this->startup_check_flag)
 	{
@@ -52,23 +69,33 @@ void SpecificWorker::initialize(int period)
 		timer.start(Period);
 	}
 
+	// Inicialización
+	Dynamic_metrics m = Dynamic_metrics();
+	m.addMetric("prueba", pruebaSuma);
+
+	try
+	{
+        std::vector<int> a{0, 2, 4}, b{1, 3, 5};
+        TYPE param = std::make_any<std::vector<std::vector<int>>>({a, b});
+		TYPE res = m.getMetric("prueba", param);
+		qDebug() << "RESULT Type:" << res.type().name();
+
+		try
+		{
+			int resultado = std::any_cast<int>(res);
+			qDebug() << "RESULTADO:" << resultado;
+		} catch(std::exception &e){ qDebug() << "CASTING" << e.what();}
+	} catch(std::exception &e){ qDebug() << "LLAMADA" << e.what();}
 }
 
 void SpecificWorker::compute()
 {
-	// std::variant<int, float, string> x;
-	// x = 3.f;
-	// qDebug() << x.index();
-	// int a = std::get<int> x;
-	// float b = std::get<float> x;
-	// string c = std::get<string> x;
-	
-	
+	//qDebug() << __FUNCTION__;
 }
 
 int SpecificWorker::startup_check()
 {
-	std::cout << "Startup check" << std::endl;
+	qDebug() << __FUNCTION__;
 	QTimer::singleShot(200, qApp, SLOT(quit()));
 	return 0;
 }

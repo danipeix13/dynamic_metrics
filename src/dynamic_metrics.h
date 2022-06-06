@@ -28,44 +28,22 @@
 #include <variant>
 #include <QtCore>
 #include <functional>
+#include <any>
 
-// The struct Overload can have arbitrary many base classes (Ts ...).
-// It derives from each class public and brings the call operator (Ts::operator...) of each base class into its scope.
-//The base classes need an overloaded call operator (Ts::operator()).
-//Lambdas provide this call operator.
+// Este ha sido el cambio
+using TYPE = std::any;
 
-
-using PAR = std::variant<int, float, std::string>;
-
-/*
-*	CÓMO Y CUÁNDO USAR
-*	
-*   La métrica será, por ejemplo, "CHC".
-*   Se ha de implementar una función f() para calcular el CHC: 
-*       - IN:  parámetros adecuados
-*       - OUT: resultado de la métrica (uso de los de T)
-*
-*	initialize():
-*		Dynamic_metrics metricCalculator();
-*		addMetric("CHC", f);
-*
-*	compute():
-*       T resultado = getMetric(name, std::vector<T>);
-*/
 
 class Dynamic_metrics
 {
 	private:
-		std::map<std::string, std::function<PAR(PAR)>> metrics;
+		std::map<std::string, std::function<TYPE(TYPE)>> metrics;
 
 	public:
 		Dynamic_metrics();
 		~Dynamic_metrics();
-		void addMetric(const std::string &metricName, std::function<PAR(PAR)> metricFunction);
-		PAR getMetric(const std::string &name, const std::vector<PAR> &paramsList);
-
-
-
+		void addMetric(const std::string &name, std::function<TYPE(TYPE)> metricFunction);
+		TYPE getMetric(const std::string &name, const TYPE &param);
 };
 
 #endif

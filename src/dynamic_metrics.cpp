@@ -29,19 +29,37 @@ Dynamic_metrics::~Dynamic_metrics()
 	qDebug() << __FUNCTION__;
 }
 
-void Dynamic_metrics::addMetric(const std::string &metricName, std::function<PAR(PAR)> metricFunction)
+void Dynamic_metrics::addMetric(const std::string &name, std::function<TYPE(TYPE)> metricFunction)
 {
 	qDebug() << __FUNCTION__;
-	//metrics.insert(std::make_pair(metricName, metricFunction));
+	metrics.insert(std::make_pair(name, metricFunction));
 }
 
-PAR Dynamic_metrics::getMetric(const std::string &name, const std::vector<PAR> &params_list)
+TYPE Dynamic_metrics::getMetric(const std::string &name, const TYPE &param)
 {
 	qDebug() << __FUNCTION__;
-	auto f = metrics.find(name);
-	auto res = f->second(params_list[0]);
+	
+	qDebug() << "\tPARAM CHECKING";
+	qDebug() << "\tparam type:" << param.type().name();
+	// std::vector<int> value = std::any_cast<std::vector<int>>(param);
+	// for (int i: value)
+	//	 qDebug() << "\t" << i;
 
-    PAR kk = 4;
+	TYPE res;
+	try
+	{
+		auto f = metrics.find(name); 
+
+		try
+		{ 
+			qDebug() << "\tSTART CALLING";
+			res = f->second(param);
+            qDebug() << "\tRESULT TYPE :" << res.type().name();
+			// qDebug() << "\tRESULT PRINT :" << std::any_cast<int>(res);
+			qDebug() << "\tEND CALLING";
+		} catch(std::exception &e){ qDebug() << "LLAMAR" << e.what();}
+	} catch(std::exception &e){ qDebug() << "OBTENER" << e.what();}
+
 	return res;
 }
 
