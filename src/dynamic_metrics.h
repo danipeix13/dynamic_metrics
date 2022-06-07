@@ -30,20 +30,19 @@
 #include <functional>
 #include <any>
 
-// Este ha sido el cambio
 using TYPE = std::any;
 
 
 class Dynamic_metrics
 {
 	private:
-		std::map<std::string, std::function<TYPE(TYPE)>> metrics;
+		std::map<std::string, std::function<TYPE(std::vector<TYPE>)>> metrics;
 
 	public:
 		Dynamic_metrics();
 		~Dynamic_metrics();
-		void addMetric(const std::string &name, std::function<TYPE(TYPE)> metricFunction);
-		TYPE getMetric(const std::string &name, const TYPE &param);
+		void addMetric(const std::string &name, std::function<TYPE(std::vector<TYPE>)> metricFunction);
+		TYPE getMetric(const std::string &name, const std::vector<TYPE> &param);
 };
 
 #endif

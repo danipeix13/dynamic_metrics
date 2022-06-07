@@ -19,48 +19,33 @@
 
 #include "dynamic_metrics.h"
 
-Dynamic_metrics::Dynamic_metrics()
-{
-	qDebug() << __FUNCTION__;
-}
+Dynamic_metrics::Dynamic_metrics() { }
 
-Dynamic_metrics::~Dynamic_metrics()
-{
-	qDebug() << __FUNCTION__;
-}
+Dynamic_metrics::~Dynamic_metrics() { }
 
-void Dynamic_metrics::addMetric(const std::string &name, std::function<TYPE(TYPE)> metricFunction)
+void Dynamic_metrics::addMetric(const std::string &name, std::function<TYPE(std::vector<TYPE>)> metricFunction)
 {
-	qDebug() << __FUNCTION__;
+	qDebug() << "\t" <<__FUNCTION__;
 	metrics.insert(std::make_pair(name, metricFunction));
 }
 
-TYPE Dynamic_metrics::getMetric(const std::string &name, const TYPE &param)
+TYPE Dynamic_metrics::getMetric(const std::string &name, const std::vector<TYPE> &param)
 {
-	qDebug() << __FUNCTION__;
-	
-	qDebug() << "\tPARAM CHECKING";
-	qDebug() << "\tparam type:" << param.type().name();
-	// std::vector<int> value = std::any_cast<std::vector<int>>(param);
-	// for (int i: value)
-	//	 qDebug() << "\t" << i;
+	qDebug() << "\t" << __FUNCTION__;
+    return metrics.find(name)->second(param);
 
-	TYPE res;
-	try
-	{
-		auto f = metrics.find(name); 
-
-		try
-		{ 
-			qDebug() << "\tSTART CALLING";
-			res = f->second(param);
-            qDebug() << "\tRESULT TYPE :" << res.type().name();
-			// qDebug() << "\tRESULT PRINT :" << std::any_cast<int>(res);
-			qDebug() << "\tEND CALLING";
-		} catch(std::exception &e){ qDebug() << "LLAMAR" << e.what();}
-	} catch(std::exception &e){ qDebug() << "OBTENER" << e.what();}
-
-	return res;
+    /* PARA DEPUTACIÓN */
+    //	TYPE res;
+    //	try
+    //	{
+    //		auto f = metrics.find(name);
+    //		try
+    //		{
+    //			res = f->second(param);
+    //            qDebug() << __FUNCTION__ << "\tTipo del resultado :" << res.type().name();
+    //		} catch(std::exception &e){ qDebug() << __FUNCTION__ << "LLAMADA A LA FUNCIÓN" << e.what();}
+    //	} catch(std::exception &e){ qDebug() << __FUNCTION__ << "OBTENCIÓN DE LA FUNCIÓN" << e.what();}
+    //  return res;
 }
 
 
