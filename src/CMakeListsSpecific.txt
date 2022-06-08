@@ -2,14 +2,13 @@
 SET ( SOURCES
   specificworker.cpp
   specificmonitor.cpp
-  dynamic_metrics.cpp
+  dynamic_metrics.h
 )
 
 # Headers set
 SET ( HEADERS
   specificworker.h
   specificmonitor.h
-  dynamic_metrics.h
 )
 
 set(CMAKE_CXX_STANDARD 20)

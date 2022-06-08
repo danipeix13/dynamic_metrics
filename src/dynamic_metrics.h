@@ -28,21 +28,27 @@
 #include <variant>
 #include <QtCore>
 #include <functional>
-#include <any>
 
-using TYPE = std::any;
-
-
+template<typename T>
 class Dynamic_metrics
 {
 	private:
-		std::map<std::string, std::function<TYPE(std::vector<TYPE>)>> metrics;
+		std::map<std::string, std::function<float(T)>> metrics;
 
 	public:
-		Dynamic_metrics();
-		~Dynamic_metrics();
-		void addMetric(const std::string &name, std::function<TYPE(std::vector<TYPE>)> metricFunction);
-		TYPE getMetric(const std::string &name, const std::vector<TYPE> &param);
+		Dynamic_metrics() {};
+
+		~Dynamic_metrics() {};
+
+		void addMetric(const std::string &name, std::function<float(T)> metricFunction)
+        {
+            metrics.insert(std::make_pair(name, metricFunction));
+        }
+
+        float getMetric(const std::string &name, const T &param)
+        {
+            return metrics.find(name)->second(param);
+        }
 };
 
 #endif
